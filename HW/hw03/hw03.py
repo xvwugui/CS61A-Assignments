@@ -25,6 +25,12 @@ def num_eights(n):
     True
     """
     "*** YOUR CODE HERE ***"
+    if n < 10 and n != 8:
+        return 0
+    elif n == 8:
+        return 1
+    else:
+        return num_eights(n//10) + num_eights(n%10)
 
 
 def digit_distance(n):
@@ -47,6 +53,10 @@ def digit_distance(n):
     True
     """
     "*** YOUR CODE HERE ***"
+    if n < 10:
+        return 0
+    else:
+        return digit_distance(n//10) + abs(n%10 - n//10%10)
 
 
 def interleaved_sum(n, odd_func, even_func):
@@ -71,6 +81,14 @@ def interleaved_sum(n, odd_func, even_func):
     True
     """
     "*** YOUR CODE HERE ***"
+    def sum_from(k):
+        if k > n:
+            return 0
+        elif k == n:
+            return odd_func(k)
+        else:
+            return odd_func(k) + even_func(k+1) + sum_from(k + 2)
+    return sum_from(1)
 
 
 def next_smaller_dollar(bill):
@@ -107,6 +125,17 @@ def count_dollars(total):
     True
     """
     "*** YOUR CODE HERE ***"
+    def count_partitions(total, bill):
+        if total == 0:
+            return 1
+        elif total < 0:
+            return 0
+        elif bill == None:
+            return 0
+        else:
+            return count_partitions(total - bill, bill) + count_partitions(total, next_smaller_dollar(bill))
+
+    return count_partitions(total, 100)    
 
 
 def next_larger_dollar(bill):
@@ -143,6 +172,17 @@ def count_dollars_upward(total):
     True
     """
     "*** YOUR CODE HERE ***"
+    def count(total, bill):
+        if total == 0:
+            return 1
+        elif total < 0:
+            return 0
+        elif bill == None:
+            return 0
+        else:
+            return count(total - bill, bill) + count(total, next_larger_dollar(bill))
+
+    return count(total, 1)
 
 
 def print_move(origin, destination):
@@ -193,5 +233,5 @@ def make_anonymous_factorial():
     ...     ['Assign', 'AnnAssign', 'AugAssign', 'NamedExpr', 'FunctionDef', 'Recursion'])
     True
     """
-    return 'YOUR_EXPRESSION_HERE'
+    return lambda n: mul(n, make_anonymous_factorial()(sub(n, 1)))
 
